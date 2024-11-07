@@ -1,10 +1,12 @@
-using Gestao.Client.Pages;
 using Gestao.Components;
 using Gestao.Components.Account;
 using Gestao.Data;
+using Gestao.Infra.Mail;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using System.Net.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +37,28 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
-builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+builder.Services.AddSingleton<SmtpClient>(opt =>
+{
+    string user = builder.Configuration.GetValue<string>("EmailSender:User")!;
+    string password = builder.Configuration.GetValue<string>("EmailSender:Password")!;
+
+    return new()
+    {
+        Host = builder.Configuration.GetValue<string>("EmailSender:Server")!,
+        Port = builder.Configuration.GetValue<int>("EmailSender:Port")!,
+        EnableSsl = builder.Configuration.GetValue<bool>("EmailSender:SSL")!,
+        Credentials = new NetworkCredential(user, password)
+    };
+});
+
+builder.Services.AddAuthentication()
+   .AddGoogle(options =>
+   {
+       options.ClientId = builder.Configuration.GetValue<string>("OAuth:Google:ClientId")!;
+       options.ClientSecret = builder.Configuration.GetValue<string>("OAuth:Google:ClientSecret")!;
+   });
+
+builder.Services.AddSingleton<IEmailSender<ApplicationUser>, EmailSender>();
 
 var app = builder.Build();
 

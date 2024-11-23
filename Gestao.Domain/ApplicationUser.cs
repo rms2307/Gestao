@@ -6,5 +6,4 @@ namespace Gestao.Data
     public class ApplicationUser : IdentityUser
     {
     }
-
 }

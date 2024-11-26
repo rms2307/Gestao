@@ -1,4 +1,6 @@
-﻿namespace Gestao.Domain
+﻿using Gestao.Domain.Enums;
+
+namespace Gestao.Domain
 {
     public class FinancialTransaction
     {

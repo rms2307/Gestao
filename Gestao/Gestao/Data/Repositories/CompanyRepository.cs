@@ -1,10 +1,11 @@
 ﻿using Gestao.Client.Libraries.Utilities;
+using Gestao.Data.Repositories.Interfaces;
 using Gestao.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gestao.Data.Repositories
 {
-    public class CompanyRepository
+    public class CompanyRepository : ICompanyRepository
     {
         private readonly ApplicationDbContext _db;
 
@@ -27,24 +28,32 @@ namespace Gestao.Data.Repositories
             return new PaginatedList<Company>(items, pageIndex, totalPages);
         }
 
-        public Company Get(int id)
+        public async Task<Company?> Get(int id)
         {
-            throw new NotImplementedException();
+            return await _db.Companies.SingleOrDefaultAsync(a => a.Id == id);
         }
 
-        public void Add(Company company)
+        public async Task Add(Company company)
         {
-
+            _db.Companies.Add(company);
+            await _db.SaveChangesAsync();
         }
 
-        public void Update(Company company)
+        public async Task Update(Company company)
         {
-
+            _db.Companies.Update(company);
+            await _db.SaveChangesAsync();
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
+            Company? company = await Get(id);
 
+            if (company is not null)
+            {
+                _db.Companies.Remove(company);
+                await _db.SaveChangesAsync();
+            }
         }
     }
 }

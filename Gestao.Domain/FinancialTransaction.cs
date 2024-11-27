@@ -5,6 +5,7 @@ namespace Gestao.Domain
     public class FinancialTransaction
     {
         public int Id { get; set; }
+        public TypeFinancialTransaction TypeFinancialTransaction { get; set; }
         public string Description { get; set; } = string.Empty;
         public DateTimeOffset ReferenceDate { get; set; }
         public DateTimeOffset DueDate { get; set; }
@@ -18,7 +19,7 @@ namespace Gestao.Domain
         public string? Observation { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
 
-        public ICollection<DocumentAttachment>? DocumentAttachments { get; set; }
+        public ICollection<Document>? Documents { get; set; }
 
         public int? CompanyId { get; set; }
         public Company? Company { get; set; }

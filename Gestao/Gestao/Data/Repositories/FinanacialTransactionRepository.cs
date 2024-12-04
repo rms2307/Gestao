@@ -3,6 +3,7 @@ using Gestao.Data.Repositories.Interfaces;
 using Gestao.Domain;
 using Gestao.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Gestao.Data.Repositories
 {
@@ -15,10 +16,14 @@ namespace Gestao.Data.Repositories
             _db = db;
         }
 
-        public async Task<PaginatedList<FinancialTransaction>> GetAllAsync(int companyId, TypeFinancialTransaction type, int pageIndex, int pageSize)
+        public async Task<PaginatedList<FinancialTransaction>> GetAllAsync(int companyId, TypeFinancialTransaction type, int pageIndex, int pageSize, string search = "")
         {
+            Expression<Func<FinancialTransaction, bool>> filter =
+                a => a.Description.Contains(search, StringComparison.OrdinalIgnoreCase) || a.Description.Contains(search, StringComparison.OrdinalIgnoreCase);
+
             List<FinancialTransaction> items = await _db.FinancialTransactions
                 .Where(a => a.CompanyId == companyId && a.TypeFinancialTransaction == type)
+                .Where(filter)
                 .OrderByDescending(a => a.ReferenceDate)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
@@ -26,6 +31,7 @@ namespace Gestao.Data.Repositories
 
             int count = await _db.FinancialTransactions
                 .Where(a => a.CompanyId == companyId && a.TypeFinancialTransaction == type)
+                .Where(filter)
                 .CountAsync();
             int totalPages = (int)Math.Ceiling((decimal)count / pageSize);
 

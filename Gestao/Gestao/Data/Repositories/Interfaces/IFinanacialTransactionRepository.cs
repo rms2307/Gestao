@@ -9,7 +9,7 @@ namespace Gestao.Data.Repositories.Interfaces
         Task AddAsync(FinancialTransaction entity);
         Task DeleteAsync(int id);
         Task<FinancialTransaction?> GetAsync(int id);
-        Task<PaginatedList<FinancialTransaction>> GetAllAsync(int companyId, TypeFinancialTransaction type, int pageIndex, int pageSize);
+        Task<PaginatedList<FinancialTransaction>> GetAllAsync(int companyId, TypeFinancialTransaction type, int pageIndex, int pageSize, string search = "");
         Task UpdateAsync(FinancialTransaction entity);
     }
 }

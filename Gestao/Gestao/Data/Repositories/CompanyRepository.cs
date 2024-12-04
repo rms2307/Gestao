@@ -2,6 +2,7 @@
 using Gestao.Data.Repositories.Interfaces;
 using Gestao.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Gestao.Data.Repositories
 {
@@ -14,16 +15,23 @@ namespace Gestao.Data.Repositories
             _db = db;
         }
 
-        public async Task<PaginatedList<Company>> GetAllAsync(Guid applicationUserId, int pageIndex, int pageSize)
+        public async Task<PaginatedList<Company>> GetAllAsync(Guid applicationUserId, int pageIndex, int pageSize, string search = "")
         {
+            Expression<Func<Company, bool>> filter =
+                a => a.TradeName.Contains(search, StringComparison.OrdinalIgnoreCase) || a.LegalName.Contains(search, StringComparison.OrdinalIgnoreCase);
+
             List<Company> items = await _db.Companies
                 .Where(a => a.UserId == applicationUserId)
+                .Where(filter)
                 .OrderBy(a => a.TradeName)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            int count = await _db.Companies.Where(a => a.UserId == applicationUserId).CountAsync();
+            int count = await _db.Companies
+                .Where(a => a.UserId == applicationUserId)
+                .Where(filter)
+                .CountAsync();
             int totalPages = (int)Math.Ceiling((decimal)count / pageSize);
 
             return new PaginatedList<Company>(items, pageIndex, totalPages);

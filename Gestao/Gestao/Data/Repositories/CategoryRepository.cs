@@ -14,10 +14,11 @@ namespace Gestao.Data.Repositories
             _db = db;
         }
 
-        public async Task<PaginatedList<Category>> GetAll(int companyId, int pageIndex, int pageSize)
+        public async Task<PaginatedList<Category>> GetAllAsync(int companyId, int pageIndex, int pageSize)
         {
             List<Category> items = await _db.Categories
                 .Where(a => a.CompanyId == companyId)
+                .OrderBy(a => a.Name)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -28,31 +29,31 @@ namespace Gestao.Data.Repositories
             return new PaginatedList<Category>(items, pageIndex, totalPages);
         }
 
-        public async Task<List<Category>> GetAll(int companyId)
+        public async Task<List<Category>> GetAllAsync(int companyId)
         {
             return await _db.Categories.Where(a => a.CompanyId == companyId).ToListAsync();
         }
 
-        public async Task<Category?> Get(int id)
+        public async Task<Category?> GetAsync(int id)
         {
             return await _db.Categories.SingleOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task Add(Category entity)
+        public async Task AddAsync(Category entity)
         {
             _db.Categories.Add(entity);
             await _db.SaveChangesAsync();
         }
 
-        public async Task Update(Category entity)
+        public async Task UpdateAsync(Category entity)
         {
             _db.Categories.Update(entity);
             await _db.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var entity = await Get(id);
+            var entity = await GetAsync(id);
 
             if (entity is not null)
             {

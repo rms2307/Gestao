@@ -5,11 +5,11 @@ namespace Gestao.Data.Repositories.Interfaces
 {
     public interface ICategoryRepository
     {
-        Task Add(Category entity);
-        Task Delete(int id);
-        Task<Category?> Get(int id);
-        Task<List<Category>> GetAll(int companyId);
-        Task<PaginatedList<Category>> GetAll(int companyId, int pageIndex, int pageSize);
-        Task Update(Category entity);
+        Task AddAsync(Category entity);
+        Task DeleteAsync(int id);
+        Task<Category?> GetAsync(int id);
+        Task<List<Category>> GetAllAsync(int companyId);
+        Task<PaginatedList<Category>> GetAllAsync(int companyId, int pageIndex, int pageSize);
+        Task UpdateAsync(Category entity);
     }
 }

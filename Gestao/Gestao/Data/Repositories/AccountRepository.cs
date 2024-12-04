@@ -14,11 +14,13 @@ namespace Gestao.Data.Repositories
             _db = db;
         }
 
-        public async Task<PaginatedList<Account>> GetAll(int companyId, int pageIndex, int pageSize)
+        public async Task<PaginatedList<Account>> GetAllAsync(int companyId, int pageIndex, int pageSize)
         {
-            List<Account> items = await _db.Accounts.Where(a => a.CompanyId == companyId).
-                Skip((pageIndex - 1) * pageSize).
-                Take(pageSize)
+            List<Account> items = await _db.Accounts
+                .Where(a => a.CompanyId == companyId)
+                .OrderBy(a => a.Description)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
             int count = await _db.Accounts.Where(a => a.CompanyId == companyId).CountAsync();
@@ -27,31 +29,31 @@ namespace Gestao.Data.Repositories
             return new PaginatedList<Account>(items, pageIndex, totalPages);
         }
 
-        public async Task<List<Account>> GetAll(int companyId)
+        public async Task<List<Account>> GetAllAsync(int companyId)
         {
             return await _db.Accounts.Where(a => a.CompanyId == companyId).ToListAsync();
         }
 
-        public async Task<Account?> Get(int id)
+        public async Task<Account?> GetAsync(int id)
         {
             return await _db.Accounts.SingleOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task Add(Account entity)
+        public async Task AddAsync(Account entity)
         {
             _db.Accounts.Add(entity);
             await _db.SaveChangesAsync();
         }
 
-        public async Task Update(Account entity)
+        public async Task UpdateAsync(Account entity)
         {
             _db.Accounts.Update(entity);
             await _db.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var entity = await Get(id);
+            var entity = await GetAsync(id);
 
             if (entity is not null)
             {

@@ -5,11 +5,11 @@ namespace Gestao.Data.Repositories.Interfaces
 {
     public interface IAccountRepository
     {
-        Task Add(Account entity);
-        Task Delete(int id);
-        Task<Account?> Get(int id);
-        Task<List<Account>> GetAll(int companyId);
-        Task<PaginatedList<Account>> GetAll(int companyId, int pageIndex, int pageSize);
-        Task Update(Account entity);
+        Task AddAsync(Account entity);
+        Task DeleteAsync(int id);
+        Task<Account?> GetAsync(int id);
+        Task<List<Account>> GetAllAsync(int companyId);
+        Task<PaginatedList<Account>> GetAllAsync(int companyId, int pageIndex, int pageSize);
+        Task UpdateAsync(Account entity);
     }
 }

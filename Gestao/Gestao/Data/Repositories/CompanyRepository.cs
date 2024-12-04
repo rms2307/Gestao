@@ -18,6 +18,7 @@ namespace Gestao.Data.Repositories
         {
             List<Company> items = await _db.Companies
                 .Where(a => a.UserId == applicationUserId)
+                .OrderBy(a => a.TradeName)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -28,26 +29,26 @@ namespace Gestao.Data.Repositories
             return new PaginatedList<Company>(items, pageIndex, totalPages);
         }
 
-        public async Task<Company?> Get(int id)
+        public async Task<Company?> GetAsync(int id)
         {
             return await _db.Companies.SingleOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task Add(Company company)
+        public async Task AddAsync(Company company)
         {
             _db.Companies.Add(company);
             await _db.SaveChangesAsync();
         }
 
-        public async Task Update(Company company)
+        public async Task UpdateAsync(Company company)
         {
             _db.Companies.Update(company);
             await _db.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            Company? company = await Get(id);
+            Company? company = await GetAsync(id);
 
             if (company is not null)
             {

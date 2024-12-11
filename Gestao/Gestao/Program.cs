@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Mail;
 using Microsoft.AspNetCore.Mvc;
+using Gestao.Domain.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -109,14 +110,45 @@ static void AddRepositories(IServiceCollection services)
 static void MapEndpoints(WebApplicationBuilder builder, WebApplication app)
 {
     int pageSize = builder.Configuration.GetValue<int>("Pagination:PageSize");
-
     app.MapGet("/api/categories", async (
         ICategoryRepository repository,
         [FromQuery] int companyId,
         [FromQuery] int pageIndex) =>
     {
         var data = await repository.GetAllAsync(companyId, pageIndex, pageSize);
+        return Results.Ok(data);
+    });
 
+    app.MapGet("/api/companies", async (
+        ICompanyRepository repository,
+        [FromQuery] Guid applicationUserId,
+        [FromQuery] int pageIndex,
+        [FromQuery] string searchWord) =>
+    {
+
+        var data = await repository.GetAllAsync(applicationUserId, pageIndex, pageSize, searchWord);
+        return Results.Ok(data);
+    });
+
+    app.MapGet("/api/accounts", async (
+        IAccountRepository repository,
+        [FromQuery] int companyId,
+        [FromQuery] int pageIndex,
+        [FromQuery] string searchWord) =>
+    {
+        var data = await repository.GetAllAsync(companyId, pageIndex, pageSize, searchWord);
+        return Results.Ok(data);
+    });
+
+    app.MapGet("/api/financialtransactions", async (
+        IFinanacialTransactionRepository repository,
+        [FromQuery] TypeFinancialTransaction type,
+        [FromQuery] int companyId,
+        [FromQuery] int pageIndex,
+        [FromQuery] string searchWord) =>
+    {
+
+        var data = await repository.GetAllAsync(companyId, type, pageIndex, pageSize, searchWord);
         return Results.Ok(data);
     });
 }

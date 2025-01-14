@@ -115,6 +115,7 @@ static void MapEndpoints(WebApplicationBuilder builder, WebApplication app)
         [FromQuery] int companyId,
         [FromQuery] int pageIndex) =>
     {
+
         var data = await repository.GetAllAsync(companyId, pageIndex, pageSize);
         return Results.Ok(data);
     });
@@ -136,6 +137,7 @@ static void MapEndpoints(WebApplicationBuilder builder, WebApplication app)
         [FromQuery] int pageIndex,
         [FromQuery] string searchWord) =>
     {
+
         var data = await repository.GetAllAsync(companyId, pageIndex, pageSize, searchWord);
         return Results.Ok(data);
     });

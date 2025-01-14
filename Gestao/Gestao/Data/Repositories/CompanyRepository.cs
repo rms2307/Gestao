@@ -18,7 +18,7 @@ namespace Gestao.Data.Repositories
         public async Task<PaginatedList<Company>> GetAllAsync(Guid applicationUserId, int pageIndex, int pageSize, string search = "")
         {
             Expression<Func<Company, bool>> filter =
-                a => a.TradeName.Contains(search, StringComparison.OrdinalIgnoreCase) || a.LegalName.Contains(search, StringComparison.OrdinalIgnoreCase);
+                a => a.TradeName.Contains(search) || a.LegalName.Contains(search);
 
             List<Company> items = await _db.Companies
                 .Where(a => a.UserId == applicationUserId)

@@ -1,7 +1,6 @@
-﻿using Gestao.Client.Libraries.Utilities;
-using Gestao.Domain;
+﻿using Gestao.Domain.Libraries.Utilities;
 
-namespace Gestao.Data.Repositories.Interfaces
+namespace Gestao.Domain.Repositories
 {
     public interface ICategoryRepository
     {

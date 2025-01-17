@@ -1,4 +1,4 @@
-﻿namespace Gestao.Client.Libraries.Utilities
+﻿namespace Gestao.Domain.Libraries.Utilities
 {
     public class PaginatedList<T>(List<T> items, int pageIndex, int totalPages)
     {

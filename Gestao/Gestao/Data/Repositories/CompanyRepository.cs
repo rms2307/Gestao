@@ -1,6 +1,6 @@
-﻿using Gestao.Client.Libraries.Utilities;
-using Gestao.Data.Repositories.Interfaces;
+﻿using Gestao.Data.Repositories.Interfaces;
 using Gestao.Domain;
+using Gestao.Domain.Libraries.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

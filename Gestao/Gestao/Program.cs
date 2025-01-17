@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Mail;
 using Microsoft.AspNetCore.Mvc;
 using Gestao.Domain.Enums;
+using Gestao.Domain.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
